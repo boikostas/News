@@ -47,7 +47,7 @@ class TodayViewModel: ObservableObject {
                 //TODO: Checking of favorites 
                 DispatchQueue.main.async { [self] in
                     
-                    articles.removeAll()
+                    self.articles.removeAll()
                     
                     for index in 0..<result.articles.count {
                         var article = result.articles[index]
@@ -83,7 +83,7 @@ class TodayViewModel: ObservableObject {
             
             DispatchQueue.main.async { [self] in
                 
-                categoryArticles.removeAll()
+                self.categoryArticles.removeAll()
                 
                 for index in 0..<result.articles.count {
                     var article = result.articles[index]

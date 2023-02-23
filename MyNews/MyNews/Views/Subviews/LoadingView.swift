@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct LoadingView: View {
+
+//    @Environment(\.colorScheme) var color
     
     var body: some View {
         RoundedRectangle(cornerRadius: 15)
-            .foregroundColor(Color.init(white: 0.95))
             .frame(maxWidth: .infinity, minHeight: 70, maxHeight: 200)
+            .foregroundColor(Color.loadingTile)
     }
 }
 

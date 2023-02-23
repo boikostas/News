@@ -23,26 +23,11 @@ struct TodayView: View {
         
         NavigationView {
             VStack {
-                if !networkMonitor.isConnected { 
-                    Text("No connection")
-                } else {
-                    ScrollView {
-
-                        VStack {
-
-                            Divider()
-                                .padding(.top)
-
-                            countryPickerView
-
-                            Divider()
-
-                            topNewsView
-
-                            categoryNewsView
-
-                        }
-                    }
+                switch networkMonitor.isConnected {
+                case false:
+                    NoInternetConnectionView()
+                case true:
+                    buildIsConnectedView()
                 }
             }
             .navigationTitle("Today")
@@ -51,6 +36,29 @@ struct TodayView: View {
             .toolbar { ToolbarItem(placement: .navigationBarTrailing) { searchButton } }
         }
         .onAppear { vm.onAppearAction() }
+    }
+
+    @ViewBuilder
+    private func buildIsConnectedView() -> some View {
+        ScrollView {
+
+            VStack {
+
+                Divider()
+                    .background(Color.divider)
+                    .padding(.top)
+
+                countryPickerView
+
+                Divider()
+                    .background(Color.divider)
+
+                topNewsView
+
+                categoryNewsView
+
+            }
+        }
     }
 }
 
@@ -130,7 +138,6 @@ extension TodayView {
                 vm.fetchCategoryNews(category.lowercased(), country: selectedCountry.countryId)
                 self.catergory = category
             }
-            
             
             if vm.isCategotyLoading {
                 ForEach(0..<5) { view in

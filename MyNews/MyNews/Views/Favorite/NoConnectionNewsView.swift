@@ -7,36 +7,11 @@
 
 import SwiftUI
 
-class NoConnectionNewsViewModel: ObservableObject {
-
-    var article: Article
-
-    init(article: Article) {
-        self.article = article
-    }
-
-    func getImage() -> Image? {
-        guard let url = URL(string: article.urlToImage ?? ""),
-              let data = try? Data(contentsOf: url),
-              let uiImage = UIImage(data: data)
-        else { return nil }
-
-        let image = Image(uiImage: uiImage)
-        return image
-    }
-}
-
 struct NoConnectionNewsView: View {
 
     @Environment(\.presentationMode) var presentationMode
 
     let article: Article
-    @ObservedObject var vm: NoConnectionNewsViewModel
-
-    init(article: Article) {
-        self.article = article
-        self.vm = .init(article: article)
-    }
 
     var body: some View {
         NavigationView {
@@ -57,9 +32,8 @@ struct NoConnectionNewsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) { doneButton }
+            }
         }
-        }
-
     }
 
     private var image: some View {

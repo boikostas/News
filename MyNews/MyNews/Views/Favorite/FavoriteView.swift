@@ -6,38 +6,6 @@
 //
 
 import SwiftUI
-import RealmSwift
-
-class FavoriteViewModel: ObservableObject {
-    
-    @Published var savedArticles = [Article]()
-    @Published var articleForDetailsView: Article?
-    var items: Results<RealmArticle>?
-    
-    func updateArticleArray() {
-        savedArticles.removeAll()
-        items = RealmManager.getAllSavedArticles()
-        items?.forEach { realmArticle in
-            let article = RealmManager.transformRealmToArticle(realmArticle)
-            savedArticles.append(article)
-        }
-    }
-
-    @ViewBuilder
-    func presentWebView(from viewType: ViewType, isConnected: Bool) -> some View {
-        if let article = self.articleForDetailsView {
-            if isConnected {
-                ArticleWebView(viewType, article: article)
-            } else {
-                //TODO: No connection view
-                VStack {
-                    NoConnectionNewsView(article: article)
-                }
-            }
-        }
-    }
-}
-
 
 struct FavoriteView: View {
 
@@ -71,19 +39,12 @@ struct FavoriteView: View {
             .onAppear { vm.updateArticleArray() }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu("View style") {
-                        Button("Small") {
-                            newsViewStyle = .small
-                        }
-                        Button("Large") {
-                            newsViewStyle = .large
-                        }
-                    }
+                    NewsStyleView(newsViewStyle: $newsViewStyle)
+                        .disabled(vm.savedArticles.isEmpty)
                 }
             }
         }
         .fullScreenCover(isPresented: $shouldShowArticleDetails) { vm.presentWebView(from: viewType, isConnected: networkMonitor.isConnected) }
-
     }
 }
 
